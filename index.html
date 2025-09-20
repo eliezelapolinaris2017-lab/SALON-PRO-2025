@@ -1090,9 +1090,9 @@ function exportPrint(){
       .filter(f => f.fecha >= desde && f.fecha <= hasta && (!emp || f.emp === emp));
 
     // Totales contables del periodo
-    const tSub = facts.reduce((a,f)=> a + Number(f.sub||0), 0);
-    const tIvu = facts.reduce((a,f)=> a + Number(f.tax||0), 0);
-    const tTot = facts.reduce((a,f)=> a + Number(f.tot||0), 0);
+    const tSub = facts.reduce((a,f)=> a + (Number(f.sub)||0), 0);
+    const tIvu = facts.reduce((a,f)=> a + (Number(f.tax)||0), 0);
+    const tTot = facts.reduce((a,f)=> a + ((Number(f.sub)||0) + (Number(f.tax)||0)), 0); // ✅ sin propina
 
     // Totales de propinas por técnica (aparte)
     const byTec = {};
