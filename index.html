@@ -1076,17 +1076,46 @@ function exportCSV(){
 function exportPrint(){
   const {head, rows, desde, hasta, tipo, emp, empName}=exportPreview();
 
-  // Si es FACTURAS, calculamos Propinas por Técnica (aparte)
+  // Totales del periodo (solo para FACTURAS)
   let propinasHTML = '';
-  if(tipo==='facturas'){
-    const facts=load(K.FACTS,[]).filter(f=>f.fecha>=desde && f.fecha<=hasta && (!emp || f.emp===emp));
+  let totalesHTML  = '';
+  if (tipo === 'facturas') {
+    const facts = load(K.FACTS,[])
+      .filter(f => f.fecha >= desde && f.fecha <= hasta && (!emp || f.emp === emp));
+
+    // Totales contables del periodo
+    const tSub = facts.reduce((a,f)=> a + Number(f.sub||0), 0);
+    const tIvu = facts.reduce((a,f)=> a + Number(f.tax||0), 0);
+    const tTot = facts.reduce((a,f)=> a + Number(f.tot||0), 0);
+
+    // Totales de propinas por técnica (aparte)
     const byTec = {};
     facts.forEach(f=>{
       const tec = empName(f.emp) || '(Sin técnica)';
-      const p = (typeof f.propina==='number'?f.propina:+(f.notas||0))||0;
+      const p = (typeof f.propina==='number' ? f.propina : +(f.notas||0)) || 0;
       byTec[tec] = (byTec[tec]||0) + p;
     });
     const totalProp = Object.values(byTec).reduce((a,b)=>a+b,0);
+
+    totalesHTML = `
+      <h3 style="margin-top:14px">Totales del período (facturación)</h3>
+      <table style="width:100%; border-collapse:collapse; margin-top:6px">
+        <tbody>
+          <tr>
+            <td style="border:1px solid #ddd; padding:6px; font-weight:700">Subtotal</td>
+            <td style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:700">${fmtMoney(tSub)}</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #ddd; padding:6px; font-weight:700">IVU</td>
+            <td style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:700">${fmtMoney(tIvu)}</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #ddd; padding:6px; font-weight:800">Total facturación</td>
+            <td style="border:1px solid #ddd; padding:6px; text-align:right; font-weight:800">${fmtMoney(tTot)}</td>
+          </tr>
+        </tbody>
+      </table>`;
+
     propinasHTML = `
       <h3 style="margin-top:14px">Propinas (aparte, por técnica)</h3>
       <table style="width:100%; border-collapse:collapse; margin-top:6px">
@@ -1121,11 +1150,11 @@ function exportPrint(){
     <h3>${desde} a ${hasta}${emp? ' — Técnica: '+empName(emp):''}</h3>
     <table><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
     <tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>
+    ${totalesHTML}
     ${propinasHTML}
   </body></html>`;
   const w=window.open('','_blank'); w.document.write(html); w.document.close(); w.focus(); w.print();
 }
-
 /* ============================================================
   ANALYTICS (KPIs + chart 30 días)
   ============================================================= */
