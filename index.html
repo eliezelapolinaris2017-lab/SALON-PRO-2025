@@ -1045,11 +1045,17 @@ function exportPreview(){
     let facts=load(K.FACTS,[]).filter(f=>f.fecha>=desde && f.fecha<=hasta);
     if(emp) facts=facts.filter(f=>f.emp===emp);
     head=['#','Fecha','Cliente','Empleado','Método','Subtotal','IVU','Total','Propina'];
-    rows=facts.map(f=>[
-      f.num, f.fecha, f.cli, empName(f.emp), f.pago,
-      f.sub.toFixed(2), f.tax.toFixed(2), f.tot.toFixed(2),
-      ((typeof f.propina==='number'?f.propina:+(f.notas||0))||0).toFixed(2)
-    ]);
+   rows=facts.map(f=>{
+  const totalSinProp = (Number(f.sub)||0) + (Number(f.tax)||0);
+  const prop = (typeof f.propina==='number' ? Number(f.propina) : Number(f.notas||0)) || 0;
+  return [
+    f.num, f.fecha, f.cli, empName(f.emp), f.pago,
+    (Number(f.sub)||0).toFixed(2),
+    (Number(f.tax)||0).toFixed(2),
+    totalSinProp.toFixed(2),   // ✅ Total = Subtotal + IVU (sin propina)
+    prop.toFixed(2)
+  ];
+});
   }else{
     let citas=load(K.CITAS,[]).filter(c=>c.fecha>=desde && c.fecha<=hasta);
     if(emp) citas=citas.filter(c=>c.emp===emp);
