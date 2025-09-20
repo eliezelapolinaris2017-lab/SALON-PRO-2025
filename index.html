@@ -1541,27 +1541,38 @@ function factImprimir(num){
 /* ============================================================
    INICIO (boot final)
    ============================================================= */
+<script>
+// ...
 function boot(){
   ensureDefaults();
   applyBrand();
+
+  // ⚠️ Cargar SIEMPRE los inputs de Config al iniciar,
+  // para que al refrescar no aparezcan vacíos.
+  cfgLoadInputs();
+
   renderEmpleadosTabla();
   renderEmpleadosSelects();
   renderServicios();
   refreshServicioDatalist();
+
   byId('a_fecha').value = todayISO();
   byId('f_fecha').value = todayISO();
+
   renderCitas();
   renderFacturas();
   facturaNueva();
+
   const ses=load(K.SESSION,null);
   if(ses){ byId('whoami').title=`${ses.user} (${ses.role})`; show('screen-home'); }
   else show('screen-login');
+
   analyticsKPIs(); analyticsChart30();
   bindUI();
 }
 window.addEventListener('DOMContentLoaded', ()=> boot());
 </script>
-
+   
 <!-- PATCH: Botón flotante Admin + integración con salonpro-admin.js -->
 <button id="sp-admin-btn" aria-label="Panel administrativo" style="
   position:fixed; right:16px; bottom:16px; z-index:999999;
