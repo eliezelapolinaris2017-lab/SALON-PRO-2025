@@ -225,7 +225,8 @@ hr.sep{border:0; height:1px; background:linear-gradient(90deg, transparent, #283
       </div>
     </div>
   </section>
-    <!-- AGENDA -->
+
+  <!-- AGENDA -->
   <section id="screen-agenda" class="screen">
     <div class="backline">
       <button class="btn-ghost" data-goto="screen-home">← Regresar</button>
@@ -310,6 +311,10 @@ hr.sep{border:0; height:1px; background:linear-gradient(90deg, transparent, #283
           <button id="btnAddLinea" class="btn-ghost">Añadir línea</button>
           <button id="btnLoadServicios" class="btn-ghost">Servicios guardados</button>
         </div>
+
+        <!-- Datalist para autocompletar servicios -->
+        <datalist id="svc_list"></datalist>
+
         <div id="lineas"></div>
         <hr class="sep">
         <div class="row cols-3">
@@ -366,205 +371,203 @@ hr.sep{border:0; height:1px; background:linear-gradient(90deg, transparent, #283
       </div>
     </div>
   </section>
-     <!-- EXPORTACIONES -->
-  <section id="screen-export" class="screen">
-    <div class="backline">
-      <button class="btn-ghost" data-goto="screen-home">← Regresar</button>
-      <h2 style="margin:0">Exportaciones</h2>
-    </div>
-    <div class="card">
-      <div class="row cols-4">
-        <div>
-          <label>Tipo</label>
-          <select id="ex_tipo" class="input">
-            <option value="facturas">Facturas</option>
-            <option value="citas">Citas</option>
-          </select>
-        </div>
-        <div>
-          <label>Empleado</label>
-          <select id="ex_emp" class="input"></select>
-        </div>
-        <div>
-          <label>Período</label>
-          <select id="ex_periodo" class="input">
-            <option value="dia">Día</option>
-            <option value="semana">Semana</option>
-            <option value="mes">Mes</option>
-            <option value="anio">Año</option>
-            <option value="rango">Rango personalizado</option>
-          </select>
-        </div>
-        <div>
-          <label>Fecha base / inicio</label>
-          <input id="ex_fecha" type="date" class="input">
-        </div>
-      </div>
-      <div class="row cols-2" style="margin-top:.6rem" id="ex_rango_wrap">
-        <div><label>Desde</label><input id="ex_desde" type="date" class="input"></div>
-        <div><label>Hasta</label><input id="ex_hasta" type="date" class="input"></div>
-      </div>
-      <div class="toolbar" style="margin-top:.8rem">
-        <button id="btnExportCSV" class="btn-ghost">Exportar Excel (CSV)</button>
-        <button id="btnExportPrint" class="btn-ghost">Exportar PDF (Imprimir)</button>
-      </div>
-    </div>
-    <div class="card" style="margin-top:1rem">
-      <b>Vista previa</b>
-      <table class="table" id="tblExport">
-        <thead><tr class="tr" id="exHead"></tr></thead>
-        <tbody id="exBody"></tbody>
-      </table>
-    </div>
-  </section>
-    <!-- ANALYTICS -->
-  <section id="screen-analytics" class="screen">
-    <div class="backline">
-      <button class="btn-ghost" data-goto="screen-home">← Regresar</button>
-      <h2 style="margin:0">Análisis de rendimiento</h2>
-    </div>
+﻿  <!-- EXPORTACIONES -->
+ <section id="screen-export" class="screen">
+   <div class="backline">
+     <button class="btn-ghost" data-goto="screen-home">← Regresar</button>
+     <h2 style="margin:0">Exportaciones</h2>
+   </div>
+   <div class="card">
+     <div class="row cols-4">
+       <div>
+         <label>Tipo</label>
+         <select id="ex_tipo" class="input">
+           <option value="facturas">Facturas</option>
+           <option value="citas">Citas</option>
+         </select>
+       </div>
+       <div>
+         <label>Empleado</label>
+         <select id="ex_emp" class="input"></select>
+       </div>
+       <div>
+         <label>Período</label>
+         <select id="ex_periodo" class="input">
+           <option value="dia">Día</option>
+           <option value="semana">Semana</option>
+           <option value="mes">Mes</option>
+           <option value="anio">Año</option>
+           <option value="rango">Rango personalizado</option>
+         </select>
+       </div>
+       <div>
+         <label>Fecha base / inicio</label>
+         <input id="ex_fecha" type="date" class="input">
+       </div>
+     </div>
+     <div class="row cols-2" style="margin-top:.6rem" id="ex_rango_wrap">
+       <div><label>Desde</label><input id="ex_desde" type="date" class="input"></div>
+       <div><label>Hasta</label><input id="ex_hasta" type="date" class="input"></div>
+     </div>
+     <div class="toolbar" style="margin-top:.8rem">
+       <button id="btnExportCSV" class="btn-ghost">Exportar Excel (CSV)</button>
+       <button id="btnExportPrint" class="btn-ghost">Exportar PDF (Imprimir)</button>
+     </div>
+   </div>
+   <div class="card" style="margin-top:1rem">
+     <b>Vista previa</b>
+     <table class="table" id="tblExport">
+       <thead><tr class="tr" id="exHead"></tr></thead>
+       <tbody id="exBody"></tbody>
+     </table>
+   </div>
+ </section>
 
-    <div class="kpis">
-      <div class="kpi"><div class="label">Ingresos (hoy)</div><div class="value" id="kpi_ingresos_hoy">$0</div></div>
-      <div class="kpi"><div class="label">Ingresos (mes)</div><div class="value" id="kpi_ingresos_mes">$0</div></div>
-      <div class="kpi"><div class="label">Citas (hoy)</div><div class="value" id="kpi_citas_hoy">0</div></div>
-      <div class="kpi"><div class="label">No Shows (mes)</div><div class="value" id="kpi_noshow_mes">0</div></div>
-    </div>
+ <!-- ANALYTICS -->
+ <section id="screen-analytics" class="screen">
+   <div class="backline">
+     <button class="btn-ghost" data-goto="screen-home">← Regresar</button>
+     <h2 style="margin:0">Análisis de rendimiento</h2>
+   </div>
 
-    <div class="row" style="margin-top:1rem">
-      <div class="card">
-        <div class="toolbar">
-          <b>Ingresos diarios (últimos 30 días)</b>
-          <div class="spacer"></div><span class="help">Gráfica canvas sin librerías</span>
-        </div>
-        <canvas id="chart30" height="180"></canvas>
-      </div>
-    </div>
-  </section>
+   <div class="kpis">
+     <div class="kpi"><div class="label">Ingresos (hoy)</div><div class="value" id="kpi_ingresos_hoy">$0</div></div>
+     <div class="kpi"><div class="label">Ingresos (mes)</div><div class="value" id="kpi_ingresos_mes">$0</div></div>
+     <div class="kpi"><div class="label">Citas (hoy)</div><div class="value" id="kpi_citas_hoy">0</div></div>
+     <div class="kpi"><div class="label">No Shows (mes)</div><div class="value" id="kpi_noshow_mes">0</div></div>
+   </div>
 
-  <!-- EMPLEADOS -->
-  <section id="screen-empleados" class="screen">
-    <div class="backline">
-      <button class="btn-ghost" data-goto="screen-home">← Regresar</button>
-      <h2 style="margin:0">Empleados / Técnicas</h2>
-    </div>
-    <div class="card">
-      <div class="row cols-3">
-        <div><label>Nombre</label><input id="e_nombre" class="input" placeholder="Jane Doe"></div>
-        <div><label>Teléfono</label><input id="e_tel" class="input" placeholder="+1 787 ..."></div>
-        <div><label>Activo</label>
-          <select id="e_activo" class="input"><option value="1">Sí</option><option value="0">No</option></select>
-        </div>
-      </div>
-      <div class="toolbar" style="margin-top:.8rem">
-        <button id="btnEmpGuardar" class="btn-primary">Añadir / Actualizar</button>
-        <button id="btnEmpLimpiar" class="btn-ghost">Limpiar</button>
-      </div>
-    </div>
-    <div class="card" style="margin-top:1rem">
-      <table class="table" id="tblEmpleados">
-        <thead><tr class="tr"><th>Nombre</th><th>Tel</th><th>Estado</th><th class="no-print">Acciones</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
+   <div class="row" style="margin-top:1rem">
+     <div class="card">
+       <div class="toolbar">
+         <b>Ingresos diarios (últimos 30 días)</b>
+         <div class="spacer"></div><span class="help">Gráfica canvas sin librerías</span>
+       </div>
+       <canvas id="chart30" height="180"></canvas>
+     </div>
+   </div>
+ </section>
 
-  <!-- CONFIGURACIÓN -->
-  <section id="screen-config" class="screen">
-    <div class="backline">
-      <button class="btn-ghost" data-goto="screen-home">← Regresar</button>
-      <h2 style="margin:0">Configuración</h2>
-      <span class="spacer"></span>
+ <!-- EMPLEADOS -->
+ <section id="screen-empleados" class="screen">
+   <div class="backline">
+     <button class="btn-ghost" data-goto="screen-home">← Regresar</button>
+     <h2 style="margin:0">Empleados / Técnicas</h2>
+   </div>
+   <div class="card">
+     <div class="row cols-3">
+       <div><label>Nombre</label><input id="e_nombre" class="input" placeholder="Jane Doe"></div>
+       <div><label>Teléfono</label><input id="e_tel" class="input" placeholder="+1 787 ..."></div>
+       <div><label>Activo</label>
+         <select id="e_activo" class="input"><option value="1">Sí</option><option value="0">No</option></select>
+       </div>
+     </div>
+     <div class="toolbar" style="margin-top:.8rem">
+       <button id="btnEmpGuardar" class="btn-primary">Añadir / Actualizar</button>
+       <button id="btnEmpLimpiar" class="btn-ghost">Limpiar</button>
+     </div>
+   </div>
+   <div class="card" style="margin-top:1rem">
+     <table class="table" id="tblEmpleados">
+       <thead><tr class="tr"><th>Nombre</th><th>Tel</th><th>Estado</th><th class="no-print">Acciones</th></tr></thead>
+       <tbody></tbody>
+     </table>
+   </div>
+ </section>
 
-      <!-- NUEVO: Botón Aplicar cambios -->
-      <button id="btnCfgAplicar" class="btn-ghost">Aplicar cambios</button>
+ <!-- CONFIGURACIÓN -->
+ <section id="screen-config" class="screen">
+   <div class="backline">
+     <button class="btn-ghost" data-goto="screen-home">← Regresar</button>
+     <h2 style="margin:0">Configuración</h2>
+     <span class="spacer"></span>
+     <button id="btnCfgAplicar" class="btn-ghost">Aplicar cambios</button>
+     <button id="btnExportConfig" class="btn-ghost">Exportar configuración</button>
+     <label class="small">Importar</label><input id="cfgImport" type="file" accept="application/json" class="input" style="width:auto">
+   </div>
 
-      <button id="btnExportConfig" class="btn-ghost">Exportar configuración</button>
-      <label class="small">Importar</label><input id="cfgImport" type="file" accept="application/json" class="input" style="width:auto">
-    </div>
+   <div class="card">
+     <b>Branding</b>
+     <div class="row cols-4">
+       <div><label>Nombre del negocio</label><input id="cfg_name" class="input" placeholder="Salon Pro"></div>
+       <div><label>Lema / Subtítulo</label><input id="cfg_sub" class="input" placeholder="Agenda & Facturación"></div>
+       <div><label>Logo</label><input id="cfg_logo" type="file" accept="image/*" class="input"></div>
+       <div><label>Previsualización</label><img id="cfg_logo_prev" class="preview" alt="Logo"></div>
+     </div>
+     <div class="row cols-4" style="margin-top:.6rem">
+       <div><label>Fondo (imagen)</label><input id="cfg_bg" type="file" accept="image/*" class="input"></div>
+       <div><label>Opacidad de fondo (0.6 a 1)</label><input id="cfg_bg_op" type="number" step=".05" min="0.6" max="1" value="1" class="input"></div>
+       <div><label>Color primario</label><input id="cfg_primary" type="color" class="input" value="#6ee7b7"></div>
+       <div><label>Color acento</label><input id="cfg_accent" type="color" class="input" value="#93c5fd"></div>
+     </div>
+   </div>
 
-    <div class="card">
-      <b>Branding</b>
-      <div class="row cols-4">
-        <div><label>Nombre del negocio</label><input id="cfg_name" class="input" placeholder="Salon Pro"></div>
-        <div><label>Lema / Subtítulo</label><input id="cfg_sub" class="input" placeholder="Agenda & Facturación"></div>
-        <div><label>Logo</label><input id="cfg_logo" type="file" accept="image/*" class="input"></div>
-        <div><label>Previsualización</label><img id="cfg_logo_prev" class="preview" alt="Logo"></div>
-      </div>
-      <div class="row cols-4" style="margin-top:.6rem">
-        <div><label>Fondo (imagen)</label><input id="cfg_bg" type="file" accept="image/*" class="input"></div>
-        <div><label>Opacidad de fondo (0.6 a 1)</label><input id="cfg_bg_op" type="number" step=".05" min="0.6" max="1" value="1" class="input"></div>
-        <div><label>Color primario</label><input id="cfg_primary" type="color" class="input" value="#6ee7b7"></div>
-        <div><label>Color acento</label><input id="cfg_accent" type="color" class="input" value="#93c5fd"></div>
-      </div>
-    </div>
+   <div class="card" style="margin-top:1rem">
+     <b>Servicios guardados (para facturación)</b>
+     <div class="row cols-3">
+       <div><label>Servicio</label><input id="sv_nombre" class="input" placeholder="Corte de cabello"></div>
+       <div><label>Precio</label><input id="sv_precio" type="number" step=".01" class="input" placeholder="25.00"></div>
+       <div style="display:flex; align-items:flex-end"><button id="btnSvAgregar" class="btn-ghost">Agregar servicio</button></div>
+     </div>
+     <div class="row" style="margin-top:.6rem">
+       <table class="table" id="tblServicios">
+         <thead><tr class="tr"><th>Servicio</th><th>Precio</th><th class="no-print">Acciones</th></tr></thead>
+         <tbody></tbody>
+       </table>
+     </div>
+   </div>
 
-    <div class="card" style="margin-top:1rem">
-      <b>Servicios guardados (para facturación)</b>
-      <div class="row cols-3">
-        <div><label>Servicio</label><input id="sv_nombre" class="input" placeholder="Corte de cabello"></div>
-        <div><label>Precio</label><input id="sv_precio" type="number" step=".01" class="input" placeholder="25.00"></div>
-        <div style="display:flex; align-items:flex-end"><button id="btnSvAgregar" class="btn-ghost">Agregar servicio</button></div>
-      </div>
-      <div class="row" style="margin-top:.6rem">
-        <table class="table" id="tblServicios">
-          <thead><tr class="tr"><th>Servicio</th><th>Precio</th><th class="no-print">Acciones</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
+   <div class="card" style="margin-top:1rem">
+     <b>Integración Google (Form + Apps Script)</b>
+     <div class="row cols-2">
+       <div>
+         <label>URL de Google Form (respuesta)</label>
+         <input id="cfg_form_url" class="input" placeholder="https://docs.google.com/forms/d/e/.../formResponse">
+         <p class="help">Se usa para enviar citas por POST. Debe apuntar a <code>.../formResponse</code>.</p>
+       </div>
+       <div>
+         <label>URL Web App Apps Script (opcional)</label>
+         <input id="cfg_script_url" class="input" placeholder="https://script.google.com/macros/s/.../exec">
+         <p class="help">Para guardar/leer datos desde Google Sheets (como base de datos).</p>
+       </div>
+     </div>
+   </div>
 
-    <div class="card" style="margin-top:1rem">
-      <b>Integración Google (Form + Apps Script)</b>
-      <div class="row cols-2">
-        <div>
-          <label>URL de Google Form (respuesta)</label>
-          <input id="cfg_form_url" class="input" placeholder="https://docs.google.com/forms/d/e/.../formResponse">
-          <p class="help">Se usa para enviar citas por POST. Debe apuntar a <code>.../formResponse</code>.</p>
-        </div>
-        <div>
-          <label>URL Web App Apps Script (opcional)</label>
-          <input id="cfg_script_url" class="input" placeholder="https://script.google.com/macros/s/.../exec">
-          <p class="help">Para guardar/leer datos desde Google Sheets (como base de datos).</p>
-        </div>
-      </div>
-    </div>
+   <div class="card" style="margin-top:1rem">
+     <b>WhatsApp / Dirección</b>
+     <div class="row cols-3">
+       <div><label>Teléfono WhatsApp</label><input id="cfg_wa_phone" class="input" placeholder="+1 787 000 0000"></div>
+       <div><label>Texto base facturas</label><input id="cfg_wa_fact" class="input" placeholder="Gracias por su compra. Detalle:"></div>
+       <div><label>Ubicación (Maps URL)</label><input id="cfg_maps" class="input" placeholder="https://maps.google.com/?q=..."></div>
+     </div>
+   </div>
+ </section>
 
-    <div class="card" style="margin-top:1rem">
-      <b>WhatsApp / Dirección</b>
-      <div class="row cols-3">
-        <div><label>Teléfono WhatsApp</label><input id="cfg_wa_phone" class="input" placeholder="+1 787 000 0000"></div>
-        <div><label>Texto base facturas</label><input id="cfg_wa_fact" class="input" placeholder="Gracias por su compra. Detalle:"></div>
-        <div><label>Ubicación (Maps URL)</label><input id="cfg_maps" class="input" placeholder="https://maps.google.com/?q=..."></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div>© <span id="year"></span> <span id="footerName">Salon Pro</span> — Todos los derechos reservados.</div>
-  </footer>
+ <!-- FOOTER -->
+ <footer class="footer">
+   <div>© <span id="year"></span> <span id="footerName">Salon Pro</span> — Todos los derechos reservados.</div>
+ </footer>
 </main>
 
 <!-- JS APP -->
 <script>
 /* ============================================================
-  STORAGE KEYS
-  ============================================================= */
+ STORAGE KEYS
+ ============================================================= */
 const K = {
- USERS: 'sp_users',
- SESSION: 'sp_session',
- EMP: 'sp_empleados',
- CITAS: 'sp_citas',
- FACTS: 'sp_facturas',
- CFG: 'sp_config',
- SVC: 'sp_servicios',
- COUNTER_F: 'sp_fact_counter'
+USERS: 'sp_users',
+SESSION: 'sp_session',
+EMP: 'sp_empleados',
+CITAS: 'sp_citas',
+FACTS: 'sp_facturas',
+CFG: 'sp_config',
+SVC: 'sp_servicios',
+COUNTER_F: 'sp_fact_counter'
 };
 
 /* ============================================================
-  UTILIDADES
-  ============================================================= */
+ UTILIDADES
+ ============================================================= */
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const byId = id => document.getElementById(id);
@@ -574,86 +577,87 @@ const uuid = () => crypto.randomUUID ? crypto.randomUUID() : (Date.now().toStrin
 const save = (k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const load = (k,d=null)=>JSON.parse(localStorage.getItem(k)||JSON.stringify(d));
 const download = (filename, content, type='text/plain')=>{
- const a=document.createElement('a');
- a.href=URL.createObjectURL(new Blob([content],{type}));
- a.download=filename; a.click(); URL.revokeObjectURL(a.href);
+const a=document.createElement('a');
+a.href=URL.createObjectURL(new Blob([content],{type}));
+a.download=filename; a.click(); URL.revokeObjectURL(a.href);
 };
-  /* ============================================================
-  ESTADO INICIAL / DEMO USERS
-  ============================================================= */
+ /* ============================================================
+ ESTADO INICIAL / DEMO USERS
+ ============================================================= */
 function ensureDefaults(){
- if(!load(K.USERS)) save(K.USERS, [
-   {user:'admin', pass:'admin123', role:'admin'},
-   {user:'usuario', pass:'user123', role:'usuario'}
- ]);
- if(!load(K.EMP)) save(K.EMP, [
-   {id:uuid(), nombre:'Cynthia', tel:'', activo:1},
-   {id:uuid(), nombre:'María', tel:'', activo:1}
- ]);
- if(load(K.COUNTER_F)==null) save(K.COUNTER_F, 1001);
- if(!load(K.CFG)) save(K.CFG, {
-   name:'Salon Pro', sub:'Agenda & Facturación',
-   primary:'#6ee7b7', accent:'#93c5fd', bgOpacity:1,
-   logo:null, bg:null,
-   formUrl:'https://docs.google.com/forms/d/e/1FAIpQLSf1UXh09WVyDvNF0tvzPEUQGsArmm81Ice53xoWgzpY-8Ae8g/formResponse',
-   scriptUrl:'',
-   waPhone:'17870000000', waFacto:'Gracias por su visita. Detalle:',
-   maps:'',
-   formMap:{
-     nombre:"entry.126099183",
-     tel:"entry.885012759",
-     fecha:"entry.2059036119",
-     hora:"entry.805023101",
-     servicio:"entry.1764664020",
-     tecnica:"entry.1003942216",
-     correo:"entry.1481210954"
-   }
- });
- if(!load(K.SVC)) save(K.SVC, [
-   {id:uuid(), nombre:'Corte de cabello', precio:25},
-   {id:uuid(), nombre:'Color', precio:60}
- ]);
- if(!load(K.CITAS)) save(K.CITAS, []);
- if(!load(K.FACTS)) save(K.FACTS, []);
+if(!load(K.USERS)) save(K.USERS, [
+  {user:'admin', pass:'admin123', role:'admin'},
+  {user:'usuario', pass:'user123', role:'usuario'}
+]);
+if(!load(K.EMP)) save(K.EMP, [
+  {id:uuid(), nombre:'Cynthia', tel:'', activo:1},
+  {id:uuid(), nombre:'María', tel:'', activo:1}
+]);
+if(load(K.COUNTER_F)==null) save(K.COUNTER_F, 1001);
+if(!load(K.CFG)) save(K.CFG, {
+  name:'Salon Pro', sub:'Agenda & Facturación',
+  primary:'#6ee7b7', accent:'#93c5fd', bgOpacity:1,
+  logo:null, bg:null,
+  formUrl:'https://docs.google.com/forms/d/e/1FAIpQLSf1UXh09WVyDvNF0tvzPEUQGsArmm81Ice53xoWgzpY-8Ae8g/formResponse',
+  scriptUrl:'',
+  waPhone:'17870000000', waFacto:'Gracias por su visita. Detalle:',
+  maps:'',
+  formMap:{
+    nombre:"entry.126099183",
+    tel:"entry.885012759",
+    fecha:"entry.2059036119",
+    hora:"entry.805023101",
+    servicio:"entry.1764664020",
+    tecnica:"entry.1003942216",
+    correo:"entry.1481210954"
+  }
+});
+if(!load(K.SVC)) save(K.SVC, [
+  {id:uuid(), nombre:'Corte de cabello', precio:25},
+  {id:uuid(), nombre:'Color', precio:60}
+]);
+if(!load(K.CITAS)) save(K.CITAS, []);
+if(!load(K.FACTS)) save(K.FACTS, []);
 }
 
 /* ============================================================
-  TEMA / BRAND
-  ============================================================= */
+ TEMA / BRAND
+ ============================================================= */
 function applyBrand(){
- const cfg=load(K.CFG,{});
- byId('brandName').textContent = cfg.name||'Salon Pro';
- byId('brandSub').textContent  = cfg.sub || 'Agenda & Facturación';
- byId('footerName').textContent= cfg.name||'Salon Pro';
- byId('year').textContent = new Date().getFullYear();
- document.documentElement.style.setProperty('--primary', cfg.primary||'#6ee7b7');
- document.documentElement.style.setProperty('--accent',  cfg.accent ||'#93c5fd');
- document.documentElement.style.setProperty('--bg-opacity', cfg.bgOpacity ?? 1);
- if(cfg.bg){
-   document.body.style.setProperty('--bg-image', `url('${cfg.bg}')`);
- }else{
-   document.body.style.removeProperty('--bg-image');
- }
- const logoTargets=['brandLogo','loginLogo','cfg_logo_prev'];
- logoTargets.forEach(id=>{
-   const el=byId(id); if(!el) return;
-   if(cfg.logo){ el.src = cfg.logo; } else { el.removeAttribute('src'); }
- });
+const cfg=load(K.CFG,{});
+byId('brandName').textContent = cfg.name||'Salon Pro';
+byId('brandSub').textContent  = cfg.sub || 'Agenda & Facturación';
+byId('footerName').textContent= cfg.name||'Salon Pro';
+byId('year').textContent = new Date().getFullYear();
+document.documentElement.style.setProperty('--primary', cfg.primary||'#6ee7b7');
+document.documentElement.style.setProperty('--accent',  cfg.accent ||'#93c5fd');
+document.documentElement.style.setProperty('--bg-opacity', cfg.bgOpacity ?? 1);
+if(cfg.bg){
+  document.body.style.setProperty('--bg-image', `url('${cfg.bg}')`);
+}else{
+  document.body.style.removeProperty('--bg-image');
+}
+const logoTargets=['brandLogo','loginLogo','cfg_logo_prev'];
+logoTargets.forEach(id=>{
+  const el=byId(id); if(!el) return;
+  if(cfg.logo){ el.src = cfg.logo; } else { el.removeAttribute('src'); }
+});
 }
 
 /* ============================================================
-  NAVEGACIÓN / SHOW por rol
-  ============================================================= */
+ NAVEGACIÓN / SHOW por rol
+ ============================================================= */
 function show(id){
- $$('.screen').forEach(s=>s.classList.remove('active'));
- byId(id).classList.add('active');
- const ses = load(K.SESSION);
- const adminOnly = ['screen-export','screen-analytics','screen-empleados','screen-config'];
- adminOnly.forEach(h=>{
-   const el=byId(h); if(!el) return;
-   if(ses?.role==='usuario') el.classList.add('hidden'); else el.classList.remove('hidden');
- });
+$$('.screen').forEach(s=>s.classList.remove('active'));
+byId(id).classList.add('active');
+const ses = load(K.SESSION);
+const adminOnly = ['screen-export','screen-analytics','screen-empleados','screen-config'];
+adminOnly.forEach(h=>{
+  const el=byId(h); if(!el) return;
+  if(ses?.role==='usuario') el.classList.add('hidden'); else el.classList.remove('hidden');
+});
 }
+
 /* ============================================================
   LOGIN (estable)
   ============================================================= */
@@ -847,16 +851,51 @@ function citaWhatsApp(id){
   const url = `https://wa.me/${phoneRaw}?${params.toString()}`;
   window.open(url,'_blank');
 }
-  /* ============================================================
-  FACTURACIÓN (líneas, totales, exportar, WhatsApp)
+
+/* ============================================================
+  FACTURACIÓN (líneas, totales, exportar, WhatsApp + AUTOCOMPLETAR SERVICIOS)
   ============================================================ */
 function nextFacturaNumber(){
  let n=load(K.COUNTER_F,1001); save(K.COUNTER_F, n+1); return n;
 }
+
+// NUEVO: Datalist desde Configuración de Servicios
+function renderServiciosDatalist(){
+  const list = byId('svc_list');
+  if(!list) return;
+  const sv = load(K.SVC,[]);
+  list.innerHTML = sv.map(s => `<option value="${(s.nombre||'').replace(/"/g,'&quot;')}"></option>`).join('');
+}
+
+// NUEVO: Vincula un input de descripción a la base de servicios para autocompletar precio
+function hookLineaServicio(id){
+  const descEl = byId('lineas').querySelector(`[data-id="${id}"][data-k="desc"]`);
+  const precioEl = byId('lineas').querySelector(`[data-id="${id}"][data-k="precio"]`);
+  if(!descEl || !precioEl) return;
+
+  const applyMatch = () => {
+    const name = (descEl.value||'').trim().toLowerCase();
+    if(!name) return;
+    const sv = load(K.SVC,[]);
+    const match = sv.find(s => (s.nombre||'').trim().toLowerCase() === name);
+    if(match){
+      const p = Number(match.precio||0);
+      precioEl.value = isFinite(p) ? p : 0;
+      recalcFactura();
+    }
+  };
+
+  // Al confirmar opción del datalist (change) o al salir del campo (blur)
+  descEl.addEventListener('change', applyMatch);
+  descEl.addEventListener('blur', applyMatch);
+}
+
 function lineaTpl(id,data={}){
  return `
  <div class="row cols-4 tr" style="padding:.6rem; margin:.4rem 0">
-   <div><label>Descripción</label><input data-id="${id}" data-k="desc" class="input" placeholder="Servicio o producto" value="${data.desc||''}"></div>
+   <div><label>Descripción</label>
+     <input data-id="${id}" data-k="desc" class="input" placeholder="Servicio o producto" value="${data.desc||''}" list="svc_list">
+   </div>
    <div><label>Cant.</label><input data-id="${id}" data-k="cant" type="number" min="1" step="1" class="input" value="${data.cant||1}"></div>
    <div><label>Precio</label><input data-id="${id}" data-k="precio" type="number" step=".01" class="input" value="${data.precio||0}"></div>
    <div style="display:flex; align-items:flex-end; gap:.5rem">
@@ -888,6 +927,8 @@ function lineaAdd(data={}){
  ['cant','precio'].forEach(k=>{
    byId('lineas').querySelector(`[data-id="${id}"][data-k="${k}"]`).addEventListener('input', recalcFactura);
  });
+ // NUEVO: enganchar autocompletar servicio -> precio
+ hookLineaServicio(id);
  recalcFactura();
 }
 function lineaDel(id){
@@ -1072,6 +1113,7 @@ function exportPrint(){
  </body></html>`;
  const w=window.open('','_blank'); w.document.write(html); w.document.close(); w.focus(); w.print();
 }
+
 /* ============================================================
   ANALYTICS (KPIs + chart 30 días)
   ============================================================= */
@@ -1202,6 +1244,8 @@ function renderServicios(){
        <button class="btn-danger" onclick="svDel('${s.id}')">Borrar</button>
      </td>
    </tr>`).join('');
+ // Actualiza también el datalist para Facturación
+ renderServiciosDatalist();
 }
 function svAdd(){
  const nombre=byId('sv_nombre').value.trim();
@@ -1246,7 +1290,6 @@ function cfgSave(partial){
  save(K.CFG,c); applyBrand();
 }
 function cfgApplyNow(){
-  // Aplica y guarda todo lo visible de Config de una sola vez
   const payload = {
     name: byId('cfg_name')?.value || '',
     sub: byId('cfg_sub')?.value || '',
@@ -1258,7 +1301,6 @@ function cfgApplyNow(){
     waPhone: byId('cfg_wa_phone')?.value || '',
     waFacto: byId('cfg_wa_fact')?.value || '',
     maps: byId('cfg_maps')?.value || ''
-    // logo/bg ya se guardan en sus onChange
   };
   cfgSave(payload);
   applyBrand();
@@ -1303,6 +1345,8 @@ function importConfig(file){
      if(j.facturas) save(K.FACTS,j.facturas);
      if(j.users) save(K.USERS,j.users);
      applyBrand(); renderEmpleadosSelects(); renderEmpleadosTabla(); renderServicios(); renderCitas(); renderFacturas();
+     // Asegura que el datalist se refresque tras importación
+     renderServiciosDatalist();
      alert('Configuración importada.');
    }catch(e){ alert('Archivo inválido.'); }
  };
@@ -1417,6 +1461,7 @@ function boot(){
  renderEmpleadosTabla();
  renderEmpleadosSelects();
  renderServicios();
+ renderServiciosDatalist(); // NUEVO: poblar datalist al arrancar
  byId('a_fecha').value = todayISO();
  byId('f_fecha').value = todayISO();
  renderCitas();
@@ -1516,4 +1561,3 @@ window.addEventListener('DOMContentLoaded', ()=> boot());
 
 </body>
 </html>
-
