@@ -1799,6 +1799,53 @@ ${f.items.map(i=>`<tr><td>${i.desc}</td><td>${i.cant}</td><td>${fmtMoney(i.preci
 </body></html>`;
 const w=window.open('','_blank'); w.document.write(html); w.document.close(); w.focus(); w.print();
 }
+  <!-- PARCHE: navegación robusta para botones del menú (y cualquier data-goto) -->
+<script>
+(function reinforceNav(){
+// Se ejecuta una sola vez.
+if (window.__gotoBound) return;
+window.__gotoBound = true;
+
+// Lista de pantallas solo para ADMIN
+const ADMIN_ONLY = new Set(['screen-export','screen-analytics','screen-empleados','screen-config']);
+
+// Exponer helper goto() por si lo quieres usar en HTML
+window.goto = function(targetId){
+const ses = load(K.SESSION, null);
+// Si no hay sesión, manda a login
+if (!ses) { show('screen-login'); return; }
+// Si es usuario básico y la pantalla es admin, se bloquea
+if (ses.role === 'usuario' && ADMIN_ONLY.has(targetId)) {
+alert('Acceso restringido. Esta sección es solo para administradores.');
+return;
+}
+show(targetId);
+// Opcional: llevar scroll arriba
+try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(_){}
+};
+
+// Delegación global: cualquier click en algo con data-goto navega
+document.addEventListener('click', function(e){
+const btn = e.target.closest('[data-goto]');
+if (!btn) return;
+e.preventDefault();
+const targetId = btn.getAttribute('data-goto');
+if (!targetId) return;
+window.goto(targetId);
+});
+
+// Reafirma los botones de la topbar por si el split de bloques rompió el bind original
+const h = byId('btnHome'); if (h && !h.dataset.bound){ h.addEventListener('click', ()=>goto('screen-home')); h.dataset.bound='1'; }
+const c = byId('btnConfig'); if (c && !c.dataset.bound){ c.addEventListener('click', ()=>goto('screen-config')); c.dataset.bound='1'; }
+const o = byId('btnLogout'); if (o && !o.dataset.bound){ o.addEventListener('click', ()=>{ logout(); }); o.dataset.bound='1'; }
+
+// Si ya hay sesión y estás en login, te manda al home
+const ses = load(K.SESSION, null);
+const onLogin = byId('screen-login')?.classList.contains('active');
+if (ses && onLogin) goto('screen-home');
+})();
+</script>
+
 </script>
 </body>
 </html>
