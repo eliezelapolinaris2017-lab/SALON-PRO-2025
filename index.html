@@ -685,7 +685,7 @@ LOGIN
 ============================================================= */
 function loginEnsureUsers(){
 let users = load(K.USERS, null);
-if(!Array.isArray(users) || users.length===0){
+if (!Array.isArray(users) || users.length === 0) {
 users = [
 {user:'admin', pass:'admin123', role:'admin'},
 {user:'usuario', pass:'user123', role:'usuario'}
@@ -693,19 +693,61 @@ users = [
 save(K.USERS, users);
 }
 }
+
 function login(user, pass){
+user = (user||'').trim();
+pass = (pass||'').trim();
+
+// Asegura base de usuarios
 loginEnsureUsers();
-const users=load(K.USERS,[]);
-const u=users.find(x=>x.user===user && x.pass===pass);
-if(!u) return false;
-save(K.SESSION,{user:u.user, role:u.role, ts:Date.now()});
-const av=byId('whoami'); if(av) av.title=`${u.user} (${u.role})`;
+
+// Intenta con los guardados
+const users = load(K.USERS, []);
+let u = users.find(x => x.user === user && x.pass === pass);
+
+// Fallback duro por si el storage está dañado o vacío
+if (!u) {
+if (user === 'admin' && pass === 'admin123') u = {user:'admin', role:'admin'};
+if (user === 'usuario' && pass === 'user123') u = {user:'usuario', role:'usuario'};
+}
+
+if (!u) return false;
+
+// Guarda sesión y actualiza UI
+save(K.SESSION, {user: u.user, role: u.role, ts: Date.now()});
+const av = byId('whoami');
+if (av) av.title = `${u.user} (${u.role})`;
 return true;
 }
+
 function logout(){
 localStorage.removeItem(K.SESSION);
+// Limpia el tooltip/estado visual y vuelve a login
+const av = byId('whoami');
+if (av) av.title = '';
 show('screen-login');
 }
+
+// Opcional: si el botón no está enlazado por cualquier motivo, volvemos a enlazarlo
+(function ensureLoginBinding(){
+const btn = byId('doLogin');
+if (!btn) return;
+if (!btn.dataset.bound) {
+btn.addEventListener('click', ()=>{
+const u = byId('loginUser')?.value?.trim() || '';
+const p = byId('loginPass')?.value?.trim() || '';
+const ok = login(u, p);
+if (!ok) {
+alert('Credenciales inválidas. Usa admin/admin123 o usuario/user123');
+return;
+}
+show('screen-home');
+});
+btn.dataset.bound = '1';
+}
+})();
+</script>
+
 
 /* ============================================================
 EMPLEADOS
